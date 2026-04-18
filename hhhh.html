@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的回忆珍藏馆 ✨</title>
+    <style>
+        :root {
+            --primary-bg: #fdfbfb;
+            --secondary-bg: #ebedee;
+            --accent-soft: #a1c4fd; /* 莫兰迪蓝 */
+            --accent-warm: #c2e9fb; /* 莫兰迪青 */
+            --text-main: #4a4a4a;
+            --text-muted: #8e8e8e;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            color: var(--text-main);
+            line-height: 1.8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 简约顶部设计 */
+        header {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleFade 2s ease-out;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            animation: subtitleFade 2.5s ease-out;
+        }
+
+        @keyframes titleFade {
+            from { opacity: 0; transform: translateY(20px); letter-spacing: 10px; }
+            to { opacity: 1; transform: translateY(0); letter-spacing: 4px; }
+        }
+
+        @keyframes subtitleFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 语录卡片 - 极简风 */
+        .quotes-section {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: -50px auto 60px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quote-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 25px 40px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            flex: 1;
+            min-width: 300px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .quote-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-item p {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* 分类导航 - 悬浮胶囊 */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            position: sticky;
+            top: 30px;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 8px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            padding: 10px 25px;
+            border: none;
+            background: transparent;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: var(--accent-soft);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 瀑布流 */
+        .gallery-container {
+            max-width: 1300px;
+            margin: 0 auto 80px;
+            padding: 0 30px;
+            columns: 4 280px;
+            column-gap: 25px;
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+            transition: transform 0.8s ease;
+        }
+
+        /* 删除按钮 */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ff5252;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* 预览模态框 - 全屏简约 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            cursor: zoom-out;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        /* 悬浮上传按钮 */
+        .upload-btn-floating {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 10px 30px rgba(161, 196, 253, 0.4);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .upload-btn-floating:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 15px 40px rgba(161, 196, 253, 0.6);
+        }
+
+        /* 上传模态框 */
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-card h2 {
+            font-weight: 300;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .category-select {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .cat-option {
+            padding: 8px 15px;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #888;
+            transition: all 0.3s;
+        }
+
+        .cat-option.selected {
+            background: var(--accent-soft);
+            color: white;
+            border-color: var(--accent-soft);
+        }
+
+        .upload-confirm-btn {
+            background: var(--accent-soft);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .upload-confirm-btn:hover:not(:disabled) {
+            background: #8ab6fc;
+            transform: scale(1.05);
+        }
+
+        .upload-confirm-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #upload-status {
+            font-size: 0.85rem;
+            margin-top: 15px;
+            min-height: 1.2rem;
+            color: var(--accent-soft);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .gallery-container { columns: 2; padding: 0 15px; }
+            .nav-wrapper { padding: 5px; }
+            .nav-btn { padding: 8px 15px; font-size: 0.85rem; }
+            .upload-btn-floating { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 24px; }
+            .bg-love-text { font-size: 15vw; opacity: 0.05; }
+        }
+
+        /* 背景表白文字 */
+        .bg-love-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 10vw;
+            font-weight: 900;
+            color: var(--accent-soft);
+            opacity: 0.08;
+            z-index: -1;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            letter-spacing: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-love-text">我永远爱你杨语晗</div>
+
+
+    <header>
+        <h1>回忆珍藏馆</h1>
+        <p>每一帧画面都是永恒的诗篇</p>
+    </header>
+
+    <section class="quotes-section">
+        <div class="quote-item">
+            <p>“ 所谓浪漫，就是和你一起虚度时光。 ”</p>
+        </div>
+        <div class="quote-item">
+            <p>“ 所有的美好，都值得被温柔以待。 ”</p>
+        </div>
+    </section>
+
+    <div class="nav-container">
+        <div class="nav-wrapper">
+            <button class="nav-btn active" onclick="filter('all')">全部</button>
+            <button class="nav-btn" onclick="filter('meeting')">我们的见面</button>
+            <button class="nav-btn" onclick="filter('game')">洛克王国</button>
+            <button class="nav-btn" onclick="filter('video')">视频瞬间</button>
+        </div>
+    </div>
+
+    <main class="gallery-container" id="gallery">
+        <!-- 这里的画廊项会由静态内容和数据库读取内容混合生成 -->
+        <!-- 静态内容 (这些项默认不显示删除，如需删除建议手动编辑 HTML) -->
+        <div class="gallery-item meeting"><img src="见面1.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面2.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面3.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面5.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面6.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面7.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="见面8.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="哈哈哈.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="嘿嘿嘿.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="海王1.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="海王2.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="礼物.jpg" alt=""></div>
+        <div class="gallery-item meeting"><img src="风景、.jpg" alt=""></div>
+
+        <div class="gallery-item game"><img src="洛克王国/1fbd4037b97e28422ce247867a82a85d_0.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/8762c55c231e0aa7a2e5a91297a40208_0.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/8ed99f7daef600556a9f37fc1c20b346_0.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/bd87f0a10972bb8fef463cf47aa37e2d_0.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/fcd91f58419bd17cabc0287bb4ccb7b5_0.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国1.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国2.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国3.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国4.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国5.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国6.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国7.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国8.png" alt=""></div>
+        <div class="gallery-item game"><img src="洛克王国/洛克王国9.png" alt=""></div>
+
+        <div class="gallery-item video">
+            <video controls>
+                <source src="剪辑.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="gallery-item video">
+            <video controls>
+                <source src="抽象.mp4" type="video/mp4">
+            </video>
+        </div>
+    </main>
+
+    <!-- 上传按钮 -->
+    <button class="upload-btn-floating" onclick="openUploadModal()">+</button>
+
+    <!-- 上传模态框 -->
+    <div class="upload-modal" id="upload-modal" onclick="closeUploadModal(event)">
+        <div class="upload-card" onclick="event.stopPropagation()">
+            <h2>上传新回忆</h2>
+            <div class="category-select" id="cat-select">
+                <div class="cat-option selected" onclick="selectCat('meeting')">我们的见面</div>
+                <div class="cat-option" onclick="selectCat('game')">洛克王国</div>
+                <div class="cat-option" onclick="selectCat('video')">视频瞬间</div>
+            </div>
+            <input type="file" id="file-input" multiple accept="image/*,video/*" style="display: none" onchange="handleFiles(this.files)">
+            <button class="upload-confirm-btn" id="upload-btn" onclick="document.getElementById('file-input').click()">选择文件并添加</button>
+            <div id="upload-status"></div>
+            <p style="font-size: 0.7rem; color: #aaa; margin-top: 15px;">* 文件已加密存入浏览器本地数据库，可永久保存</p>
+        </div>
+    </div>
+
+    <div class="modal" id="modal" onclick="closeModal()">
+        <img class="modal-content" id="modal-img">
+    </div>
+
+    <footer>
+        &copy; 2026 我们的故事 · 永远在一起
+    </footer>
+
+    <script>
+        let currentUploadCategory = 'meeting';
+        let db;
+
+        // 初始化 IndexedDB
+        const request = indexedDB.open('MemoryDB', 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains('GalleryStore')) {
+                db.createObjectStore('GalleryStore', { keyPath: 'id', autoIncrement: true });
+            }
+        };
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            loadAllFromDB();
+        };
+        request.onerror = (e) => {
+            console.error('数据库初始化失败:', e);
+            alert('数据库初始化失败，请尝试刷新页面或更换浏览器（建议使用 Chrome/Edge）。');
+        };
+
+        function filter(category) {
+            const items = document.querySelectorAll('.gallery-item');
+            const btns = document.querySelectorAll('.nav-btn');
+            
+            btns.forEach(btn => {
+                const text = btn.innerText;
+                if (category === 'all' && text === '全部' || 
+                    category === 'meeting' && text === '我们的见面' ||
+                    category === 'game' && text === '洛克王国' ||
+                    category === 'video' && text === '视频瞬间') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                    setTimeout(() => item.style.opacity = '1', 10);
+                } else {
+                    item.style.opacity = '0';
+                    setTimeout(() => item.style.display = 'none', 300);
+                }
+            });
+        }
+
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-img');
+        
+        function bindImgClick() {
+            document.querySelectorAll('.gallery-item img').forEach(img => {
+                img.onclick = (e) => {
+                    e.stopPropagation();
+                    modal.style.display = 'flex';
+                    modalImg.src = img.src;
+                }
+            });
+        }
+        bindImgClick();
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function openUploadModal() {
+            document.getElementById('upload-modal').style.display = 'flex';
+            updateStatus('');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('upload-modal').style.display = 'none';
+        }
+
+        function selectCat(cat) {
+            currentUploadCategory = cat;
+            document.querySelectorAll('.cat-option').forEach(opt => {
+                if (opt.getAttribute('onclick').includes(cat)) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('upload-status').innerText = msg;
+        }
+
+        // 终极修复：使用单一事务确保所有文件被处理，并增加 UI 反馈
+        async function handleFiles(files) {
+            if (!db) {
+                alert('数据库未准备好，请刷新页面。');
+                return;
+            }
+
+            const filesArray = Array.from(files);
+            if (filesArray.length === 0) return;
+
+            const btn = document.getElementById('upload-btn');
+            btn.disabled = true;
+            updateStatus(`正在存储 ${filesArray.length} 个回忆...`);
+
+            try {
+                // 创建一个单一的事务处理所有文件
+                const transaction = db.transaction(['GalleryStore'], 'readwrite');
+                const store = transaction.objectStore('GalleryStore');
+                
+                let successCount = 0;
+
+                for (const file of filesArray) {
+                    const data = {
+                        blob: file,
+                        type: file.type,
+                        category: currentUploadCategory,
+                        timestamp: Date.now()
+                    };
+
+                    const addReq = store.add(data);
+                    
+                    addReq.onsuccess = () => {
+                        successCount++;
+                        addGalleryItem(URL.createObjectURL(file), file.type, currentUploadCategory, true);
+                        if (successCount === filesArray.length) {
+                            updateStatus('保存成功！');
+                            setTimeout(() => {
+                                closeUploadModal();
+                                btn.disabled = false;
+                                filter('all');
+                                bindImgClick();
+                            }, 800);
+                        }
+                    };
+
+                    addReq.onerror = (e) => {
+                        console.error('存储文件失败:', e);
+                        updateStatus('部分文件存储失败，请重试。');
+                        btn.disabled = false;
+                    };
+                }
+
+                transaction.onerror = (e) => {
+                    console.error('事务失败:', e);
+                    updateStatus('存储过程中出错，请尝试减小文件大小。');
+                    btn.disabled = false;
+                };
+
+            } catch (err) {
+                console.error('处理过程出错:', err);
+                updateStatus('发生意外错误，请重试。');
+                btn.disabled = false;
+            }
+        }
+
+        // 动态添加画廊项
+        function addGalleryItem(url, type, category, isNew = false, id = null) {
+            const gallery = document.getElementById('gallery');
+            const item = document.createElement('div');
+            item.className = `gallery-item ${category}`;
+            if (id) item.dataset.id = id;
+            
+            if (type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = url;
+                item.appendChild(img);
+            } else if (type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.controls = true;
+                const source = document.createElement('source');
+                source.src = url;
+                source.type = type;
+                video.appendChild(source);
+                item.appendChild(video);
+            }
+
+            // 添加删除按钮
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '&times;';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (confirm('确定要删除这张回忆吗？')) {
+                    deleteItem(item, id);
+                }
+            };
+            item.appendChild(deleteBtn);
+            
+            if (isNew) {
+                gallery.prepend(item);
+            } else {
+                gallery.appendChild(item);
+            }
+        }
+
+        // 删除逻辑
+        function deleteItem(element, id) {
+            if (id) {
+                // 如果有 ID，说明是 IndexedDB 里的，执行永久删除
+                const transaction = db.transaction(['GalleryStore'], 'readwrite');
+                const store = transaction.objectStore('GalleryStore');
+                store.delete(id);
+                transaction.oncomplete = () => {
+                    element.style.opacity = '0';
+                    setTimeout(() => element.remove(), 300);
+                };
+            } else {
+                // 如果没有 ID，说明是 HTML 里的静态项，仅当前页面移除
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.remove();
+                    alert('注意：这是系统预设回忆，刷新页面后会重新出现。如需永久删除，请编辑 HTML 代码。');
+                }, 300);
+            }
+        }
+
+        function loadAllFromDB() {
+            if (!db) return;
+            const transaction = db.transaction(['GalleryStore'], 'readonly');
+            const store = transaction.objectStore('GalleryStore');
+            const request = store.openCursor(null, 'prev'); // 最新的排在前面
+
+            request.onsuccess = (e) => {
+                const cursor = e.target.result;
+                if (cursor) {
+                    const data = cursor.value;
+                    const url = URL.createObjectURL(data.blob);
+                    addGalleryItem(url, data.type, data.category, true, data.id);
+                    cursor.continue();
+                } else {
+                    bindImgClick();
+                }
+            };
+        }
+    </script>
+</body>
+</html>
